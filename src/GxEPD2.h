@@ -22,7 +22,6 @@
 #define GxEPD_COLORED   GxEPD_RED
 
 #include "Arduino.h"
-#include "SPI.h"
 
 class GxEPD2
 {

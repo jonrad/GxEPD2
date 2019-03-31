@@ -445,7 +445,7 @@ void GxEPD2_270::_writeDataPGM(const uint8_t* data, uint16_t n)
   for (uint8_t i = 0; i < n; i++)
   {
     if (_cs >= 0) digitalWrite(_cs, LOW);
-    SPI.transfer(pgm_read_byte(&*data++));
+    _controller->spiTransfer(pgm_read_byte(&*data++));
     if (_cs >= 0) digitalWrite(_cs, HIGH);
   }
   _controller->spiEndTransaction();

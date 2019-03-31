@@ -115,7 +115,7 @@ void GxEPD2_it60::clearScreen(uint8_t value)
   _waitWhileBusy2("clearScreen preamble", default_wait_time);
   for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(HEIGHT); i++)
   {
-    SPI.transfer(value);
+    _controller->spiTransfer(value);
 #if defined(ESP8266) || defined(ESP32)
     if(0 == i % 10000) yield();
 #endif
@@ -143,7 +143,7 @@ void GxEPD2_it60::_writeScreenBuffer(uint8_t value)
   _waitWhileBusy2("clearScreen preamble", default_wait_time);
   for (uint32_t i = 0; i < uint32_t(WIDTH) * uint32_t(HEIGHT); i++)
   {
-    SPI.transfer(value);
+    _controller->spiTransfer(value);
 #if defined(ESP8266) || defined(ESP32)
     if(0 == i % 10000) yield();
 #endif
@@ -256,7 +256,7 @@ void GxEPD2_it60::writeNative(const uint8_t* data1, const uint8_t* data2, int16_
           data = data1[idx];
         }
         if (invert) data = ~data;
-        SPI.transfer(data);
+        _controller->spiTransfer(data);
       }
 #if defined(ESP8266) || defined(ESP32)
       yield();
@@ -346,7 +346,7 @@ void GxEPD2_it60::_send8pixel(uint8_t data)
 {
   for (uint8_t j = 0; j < 8; j++)
   {
-    SPI.transfer(data & 0x80 ? 0x00 : 0xFF);
+    _controller->spiTransfer(data & 0x80 ? 0x00 : 0xFF);
     data <<= 1;
   }
 }
@@ -446,8 +446,8 @@ void GxEPD2_it60::_waitWhileBusy2(const char* comment, uint16_t busy_time)
 
 uint16_t GxEPD2_it60::_transfer16(uint16_t value)
 {
-  uint16_t rv = SPI.transfer(value >> 8) << 8;
-  return (rv | SPI.transfer(value));
+  uint16_t rv = _controller->spiTransfer(value >> 8) << 8;
+  return (rv | _controller->spiTransfer(value));
 }
 
 void GxEPD2_it60::_writeCommand16(uint16_t c)
